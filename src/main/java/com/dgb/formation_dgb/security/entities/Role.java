@@ -5,6 +5,7 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.SQLDelete;
@@ -14,6 +15,7 @@ import org.hibernate.annotations.SQLDelete;
 @NoArgsConstructor
 @Entity
 @Table(name = "roles")
+@Builder
 @SQLDelete(sql = "update roles set etat=0 where id=? ")
 public class Role  extends AbstractEnttity {
      @Column(unique = true)

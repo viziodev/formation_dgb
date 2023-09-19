@@ -11,6 +11,7 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.ProviderManager;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.Customizer;
+import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
@@ -32,6 +33,7 @@ import javax.crypto.spec.SecretKeySpec;
 
 @Configuration
 @EnableWebSecurity
+@EnableMethodSecurity(prePostEnabled = true)
 public class SecurityConfig {
     @Autowired
     private UserDetailsService userDetailsService;
@@ -63,8 +65,10 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception{
           return httpSecurity
                   .sessionManagement(sm->sm.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+                 // .cors(cors -> cors.disable())
                   .csrf(csrf->csrf.disable())
                   .authorizeHttpRequests(ar->ar.requestMatchers("/auth/login/**").permitAll())
+                  .authorizeHttpRequests(ar->ar.requestMatchers("/admin/security/**").permitAll())
                   .authorizeHttpRequests(ar->ar.anyRequest().authenticated())
               //    .httpBasic(Customizer.withDefaults())
                   .oauth2ResourceServer(oa->oa.jwt(Customizer.withDefaults()))

@@ -2,36 +2,25 @@ package com.dgb.formation_dgb.security.controllers;
 
 import com.dgb.formation_dgb.security.dto.UserLoginRequest;
 import com.dgb.formation_dgb.security.services.JwtTokenService;
-import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.oauth2.jose.jws.MacAlgorithm;
-import org.springframework.security.oauth2.jwt.*;
 import org.springframework.web.bind.annotation.*;
 
-import java.time.Instant;
-import java.time.temporal.ChronoUnit;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/auth")
-
-public class SecurityController {
+public class AuthController {
 
     @Value("${jwt.ttlToken}")
     private int  ttlToken;
     @Value("${jwt.ttlRefreshToken}")
     private int  ttlRefreshToken;
     private final JwtTokenService jwtTokenService;
-    public SecurityController(JwtTokenService jwtTokenService) {
+    public AuthController(JwtTokenService jwtTokenService) {
         this.jwtTokenService = jwtTokenService;
     }
 

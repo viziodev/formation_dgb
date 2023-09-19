@@ -25,9 +25,9 @@ public class JwtTokenServiceImpl implements JwtTokenService{
     private UserDetailsService userDetailsService;
     @Override
     public String generate(UserDetails userDetails, int ttl,boolean refresh) {
-        userDetails.getAuthorities()
-                .stream().map(GrantedAuthority::getAuthority)
-                .collect(Collectors.toList())
+        List<String> roles = userDetails.getAuthorities()
+                 .stream().map(GrantedAuthority::getAuthority)
+                .collect(Collectors.toList());
         Instant instant =Instant.now();
         JwtClaimsSet jwtClaimsSet=JwtClaimsSet.builder()
                 .issuedAt(instant)
