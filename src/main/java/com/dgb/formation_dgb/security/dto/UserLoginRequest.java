@@ -1,7 +1,13 @@
-package com.dgb.formation_dgb.dtos.request;
+package com.dgb.formation_dgb.security.dto;
 
 import lombok.Data;
 import lombok.Getter;
 
-public record UserLoginRequest(String username,String password) {
+@Getter
+public class UserLoginRequest {
+    private String username;
+    private String password;
+    private boolean refresh=false;
+    private boolean withPassword=true;
+    private String refreshToken="";
 }
