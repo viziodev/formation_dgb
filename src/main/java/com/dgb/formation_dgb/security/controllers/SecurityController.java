@@ -6,6 +6,7 @@ import com.dgb.formation_dgb.security.services.SecurityService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -14,6 +15,7 @@ import org.springframework.web.bind.annotation.*;
 //@CrossOrigin("*")
 public class SecurityController {
      private SecurityService securityService;
+
     @PostMapping("/users")
     public ResponseEntity<?> storeUser(@RequestBody UserRequest userRequest){
 

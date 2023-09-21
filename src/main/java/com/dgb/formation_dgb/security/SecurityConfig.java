@@ -28,12 +28,12 @@ import org.springframework.security.oauth2.jwt.NimbusJwtDecoder;
 import org.springframework.security.oauth2.jwt.NimbusJwtEncoder;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
-
+import org.springframework.security.config.annotation.web.configurers.oauth2.server.resource.OAuth2ResourceServerConfigurer;
 import javax.crypto.spec.SecretKeySpec;
 
 @Configuration
 @EnableWebSecurity
-@EnableMethodSecurity(prePostEnabled = true)
+//@EnableMethodSecurity(prePostEnabled = true)
 public class SecurityConfig {
     @Autowired
     private UserDetailsService userDetailsService;
@@ -63,15 +63,16 @@ public class SecurityConfig {
     }
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception{
-          return httpSecurity
-                  .sessionManagement(sm->sm.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-                  .csrf(csrf->csrf.disable())
-                  .authorizeHttpRequests(ar->ar.requestMatchers("/auth/login/**").permitAll())
-                //  .authorizeHttpRequests(ar->ar.requestMatchers("/admin/security/**").permitAll())
-                  .authorizeHttpRequests(ar->ar.anyRequest().authenticated())
-                 // .httpBasic(Customizer.withDefaults())
-                  .oauth2ResourceServer(oa->oa.jwt(Customizer.withDefaults()))
-                  .build();
+       return httpSecurity
+                .csrf(csrf -> csrf.disable())
+                .authorizeHttpRequests(auth -> auth
+                        .requestMatchers("/auth/login/**").permitAll()
+                        .anyRequest().authenticated()
+                )
+                .sessionManagement(sess -> sess.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+                .oauth2ResourceServer(oa->oa.jwt(Customizer.withDefaults()))
+                .httpBasic(Customizer.withDefaults())
+                .build();
     }
 
     @Bean

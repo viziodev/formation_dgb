@@ -1,23 +1,18 @@
 package com.dgb.formation_dgb.mappers;
 
-import com.dgb.formation_dgb.dtos.response.ArticleConfectionResponse;
-import com.dgb.formation_dgb.dtos.response.CategorieResponse;
-import com.dgb.formation_dgb.dtos.response.FournisseurResponse;
-import com.dgb.formation_dgb.dtos.response.UniteResponse;
-import com.dgb.formation_dgb.entities.ArticleConfection;
-import com.dgb.formation_dgb.entities.Categorie;
-import com.dgb.formation_dgb.entities.Fournisseur;
-import com.dgb.formation_dgb.entities.Unite;
 import org.modelmapper.ModelMapper;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
 @Component
-public class Mapper  {
+@Qualifier("modelMapperImpl")
+public class ModelMapperImpl  implements Mapper{
     ModelMapper modelMapper = new ModelMapper();
-   public    <E, R> List<R> map( List<E> entities,Class<R> targetClass ){
+        @Override
+       public    <E, R> List<R> map( List<E> entities,Class<R> targetClass ){
           return entities
                 .stream()
                 .map(entity-> modelMapper.map(entity,targetClass)

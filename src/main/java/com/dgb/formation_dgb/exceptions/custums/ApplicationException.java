@@ -6,16 +6,16 @@ import org.springframework.http.HttpStatus;
 
 @Getter
 @AllArgsConstructor
-public class ApplicationExeption extends RuntimeException{
+public class ApplicationException extends RuntimeException{
     private  String key="field";
     private HttpStatus httpStatus=HttpStatus.NOT_FOUND;
 
-    public ApplicationExeption(String message) {
+    public ApplicationException(String message) {
         super(message);
 
     }
 
-    public  ApplicationExeption(String key,String message) {
+    public ApplicationException(String key, String message) {
         super(message);
         this.key = key;
     }

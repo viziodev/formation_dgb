@@ -7,8 +7,8 @@ import com.dgb.formation_dgb.entities.Article;
 
 public interface ArticleConfectionService {
     Article findArticleConfectionByLibelle(String libelle);
-        ArticleConfectionResponse store (ArticleConfectionRequest request);
-
-
+    ArticleConfectionResponse store (ArticleConfectionRequest request);
     ArticleConfectionLoadResponse load();
+
+    ArticleConfectionResponse update(Long id, ArticleConfectionRequest request);
 }

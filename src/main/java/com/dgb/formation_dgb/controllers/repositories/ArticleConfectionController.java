@@ -7,6 +7,7 @@ import com.dgb.formation_dgb.dtos.response.ArticleConfectionResponse;
 import com.dgb.formation_dgb.entities.Article;
 import com.dgb.formation_dgb.entities.ArticleConfection;
 import com.dgb.formation_dgb.services.ArticleConfectionService;
+import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -29,8 +30,15 @@ public class ArticleConfectionController {
     }
 
     @PostMapping("")
-    public ResponseEntity<ArticleConfectionResponse> store(@RequestBody ArticleConfectionRequest request){
+    public ResponseEntity<ArticleConfectionResponse> store(@Valid @RequestBody ArticleConfectionRequest request){
         return new ResponseEntity<>(articleConfectionService.store(request), HttpStatus.CREATED);
     }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<ArticleConfectionResponse> update(@PathVariable() Long id ,@Valid @RequestBody ArticleConfectionRequest request){
+        return new ResponseEntity<>(articleConfectionService.update(id,request), HttpStatus.CREATED);
+    }
+
+
 
 }

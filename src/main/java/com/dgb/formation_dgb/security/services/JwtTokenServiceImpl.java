@@ -6,6 +6,7 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.oauth2.jose.jws.MacAlgorithm;
@@ -30,7 +31,6 @@ public class JwtTokenServiceImpl implements JwtTokenService{
         List<String> roles = userDetails.getAuthorities()
                  .stream().map(GrantedAuthority::getAuthority)
                  .collect(Collectors.toList());
-          log.info("{}",userDetails.getAuthorities());
         Instant instant =Instant.now();
         JwtClaimsSet jwtClaimsSet=JwtClaimsSet.builder()
                 .issuedAt(instant)
@@ -52,6 +52,8 @@ public class JwtTokenServiceImpl implements JwtTokenService{
         Authentication authentication=  authenticationManager.
                 authenticate(new UsernamePasswordAuthenticationToken(username
                         ,password));
+        log.info("{}",authentication.getAuthorities());
+        SecurityContextHolder.getContext().setAuthentication(authentication);
         return (UserDetails)authentication.getPrincipal();
     }
     @Override

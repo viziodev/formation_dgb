@@ -1,12 +1,17 @@
 package com.dgb.formation_dgb.security.controllers;
 
+import com.dgb.formation_dgb.security.IAuthenticationFacade;
 import com.dgb.formation_dgb.security.dto.UserLoginRequest;
 import com.dgb.formation_dgb.security.services.JwtTokenService;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
@@ -23,25 +28,35 @@ public class AuthController {
     @Value("${jwt.ttlRefreshToken}")
     private int  ttlRefreshToken;
     private final JwtTokenService jwtTokenService;
+    @Autowired
+    private AuthenticationManager authenticationManager;
+    @Autowired
+    private IAuthenticationFacade authenticationFacade;
     public AuthController(JwtTokenService jwtTokenService) {
         this.jwtTokenService = jwtTokenService;
     }
 
-    //@PreAuthorize("hasAuthority('SCOPE_USER')")
-    @GetMapping("/profile")
-    public Authentication authentication(Authentication authentication){
-        log.info("{}",authentication.getAuthorities());
 
-        return authentication;
+    @GetMapping("/profile")
+    public Authentication authentication(){
+          return authenticationFacade.getAuthentication() ;
     }
 
     @PostMapping("/login")
     public ResponseEntity<Map<String , String>> login(@RequestBody UserLoginRequest userRequest){
         Map<String , String> token=new HashMap<>();
         UserDetails userDetails=null;
-          userDetails=userRequest.isWithPassword()
-                  ? jwtTokenService.authenticationWithPassword(userRequest.getUsername(), userRequest.getPassword())
-                  : jwtTokenService.authenticationWithRefreshToken(userRequest.getRefreshToken());
+
+                  if(userRequest.isWithPassword()){
+                      Authentication authentication=  authenticationManager.
+                              authenticate(new UsernamePasswordAuthenticationToken(userRequest.getUsername()
+                                      ,userRequest.getPassword()));
+                      SecurityContextHolder.getContext().setAuthentication(authentication);
+                      userDetails= (UserDetails)authentication.getPrincipal();
+                  }else{
+                      userDetails=jwtTokenService.authenticationWithRefreshToken(userRequest.getRefreshToken());
+                  }
+
           //2-Creer Payload
              token.put("access-token", jwtTokenService.generate(userDetails,ttlToken,false));
             if(userRequest.isRefresh()){
