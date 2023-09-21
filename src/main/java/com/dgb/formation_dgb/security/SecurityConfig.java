@@ -65,12 +65,11 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception{
           return httpSecurity
                   .sessionManagement(sm->sm.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-                 // .cors(cors -> cors.disable())
                   .csrf(csrf->csrf.disable())
                   .authorizeHttpRequests(ar->ar.requestMatchers("/auth/login/**").permitAll())
-                  .authorizeHttpRequests(ar->ar.requestMatchers("/admin/security/**").permitAll())
+                //  .authorizeHttpRequests(ar->ar.requestMatchers("/admin/security/**").permitAll())
                   .authorizeHttpRequests(ar->ar.anyRequest().authenticated())
-              //    .httpBasic(Customizer.withDefaults())
+                 // .httpBasic(Customizer.withDefaults())
                   .oauth2ResourceServer(oa->oa.jwt(Customizer.withDefaults()))
                   .build();
     }

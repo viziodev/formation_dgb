@@ -23,7 +23,6 @@ public class Utilisateur extends AbstractEnttity {
     private String username;
     private String password;
     @ManyToMany(fetch = FetchType.EAGER)
-
     List<Role> roles ;
 
 }

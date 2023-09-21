@@ -1,6 +1,7 @@
 package com.dgb.formation_dgb.security.services;
 
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -18,6 +19,7 @@ import java.util.stream.Collectors;
 
 @Service
 @AllArgsConstructor
+@Slf4j
 public class JwtTokenServiceImpl implements JwtTokenService{
     private JwtEncoder jwtEncoder;
     private AuthenticationManager authenticationManager;
@@ -27,7 +29,8 @@ public class JwtTokenServiceImpl implements JwtTokenService{
     public String generate(UserDetails userDetails, int ttl,boolean refresh) {
         List<String> roles = userDetails.getAuthorities()
                  .stream().map(GrantedAuthority::getAuthority)
-                .collect(Collectors.toList());
+                 .collect(Collectors.toList());
+          log.info("{}",userDetails.getAuthorities());
         Instant instant =Instant.now();
         JwtClaimsSet jwtClaimsSet=JwtClaimsSet.builder()
                 .issuedAt(instant)
@@ -51,7 +54,6 @@ public class JwtTokenServiceImpl implements JwtTokenService{
                         ,password));
         return (UserDetails)authentication.getPrincipal();
     }
-
     @Override
     public UserDetails authenticationWithRefreshToken(String refreshToken) {
            Jwt jwtTokenDecode=jwtDecoder.decode(refreshToken);

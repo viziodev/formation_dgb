@@ -13,6 +13,7 @@ import org.springframework.data.rest.core.annotation.RepositoryRestResource;
 import org.springframework.data.rest.core.annotation.RestResource;
 
 import java.util.List;
+import java.util.Optional;
 
 @RepositoryRestResource(excerptProjection = CategorieProjection.class)
 public interface CategorieRepository extends BaseRepository<Categorie,Long>{
@@ -34,6 +35,7 @@ public interface CategorieRepository extends BaseRepository<Categorie,Long>{
     //List<Categorie> findCategoriesByEtat(boolean etat);
          Page<Categorie> findCategoriesByEtat(Pageable page,boolean etat);
 
+      Optional<Categorie> findByLibelle(String libelle);
 
 
 }
